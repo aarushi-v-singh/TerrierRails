@@ -1,0 +1,40 @@
+<%# app/views/scheduler/index.html.erb %>
+
+<div style="background-color: #333; color: white; padding: 15px;">
+  <h1 style="margin: 0;">Terrier Rails Technician Schedule</h1>
+</div>
+
+<div class="calendar-container">
+  
+  <div class="time-column">
+    <div style="height: 40px; border-bottom: 2px solid black;">Time</div> 
+    <% @hours.each do |hour| %>
+      <div class="time-label">
+        <%= hour %>:00
+      </div>
+    <% end %>
+  </div>
+
+  <% @techs.each do |tech| %>
+    <div class="tech-column">
+      <div class="tech-header">
+        <%= tech.name %>
+      </div>
+      
+      <div class="grid-content">
+        <% @wos.select { |wo| wo.technician_id == tech.id }.each do |wo| %>
+          <%# Basic math: minutes from midnight %>
+          <% top_pos = (wo.time.hour * 60) + wo.time.min %> 
+          
+          <div class="work-order-block" style="top: <%= top_pos %>px; height: <%= wo.duration %>px;">
+            <b><%= wo.location.name %></b><br>
+            <%= wo.location.city %><br>
+            $<%= wo.price %>
+          </div>
+        <% end %>
+      </div>
+    
+    </div>
+  <% end %>
+
+</div>

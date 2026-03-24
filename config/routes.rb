@@ -11,4 +11,10 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  # TODO : get "/scheduele_grid", to: "scheduele_grid#index"
+
+  root "scheduler#index"
+  resources :scheduler
+
 end
