@@ -1,6 +1,5 @@
 <div style="background-color: #333; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
   <h1 style="margin: 0;">Terrier Rails Technician Schedule</h1>
-  <h2 style="margin: 0; font-weight: 400;"><%= @schedule_date %></h2>
 </div>
 
 <div class="calendar-container">
@@ -46,7 +45,6 @@
 <script>
 function calculateGap(grid, event, techName) {
   if (event.target.closest('.work-order-block')) return;
-
   const rect = grid.getBoundingClientRect();
   const clickedAt = Math.floor(event.clientY - rect.top);
 

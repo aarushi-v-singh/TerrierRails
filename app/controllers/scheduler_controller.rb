@@ -6,7 +6,7 @@ class SchedulerController < ApplicationController
     # Hashtable of work orders by tech ID
     @wos_by_tech = all_wos.group_by(&:technician_id)
 
-    # header date cuz why not
+    # Header date cuz why not
     @schedule_date = all_wos.first&.time&.strftime("%B %d, %Y")
   end
 end
