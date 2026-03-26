@@ -9,66 +9,111 @@
  * Consider organizing styles into separate files for maintainability.
  */
 
-
-/* Reseting */
+/* Resetting */
 body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
 }
 
-/* Calendar container */
 .calendar-container {
   display: flex;
   margin: 20px;
-  border: 2px solid black; /* Simple solid border */
-  height: 900px;
-  overflow: auto;
+  border: 1px solid black;
+  height: 85vh;
+  overflow: auto; 
+  position: relative;
 }
 
-/* Hours on left side */
 .time-column {
+  position: sticky;
+  left: 0;
+  z-index: 110;  
   width: 80px;
-  border-right: 2px solid black;
-  background-color: #eeeeee; /* Simple grey */
-}
-
-.time-label {
-  height: 60px;
-  border-bottom: 1px solid #ccc;
-  text-align: center;
-  font-size: 14px;
-}
-
-/* Technician columns */
-.tech-column {
-  flex: 1; /* Makes columns even width */
+  background-color: #eeeeee;
   border-right: 1px solid black;
-  position: relative; /* Still needed for the blue blocks to work! */
-  min-width: 150px;
+  flex-shrink: 0;  
 }
 
-.tech-header {
+ .tech-column {
+  flex: 1;
+  min-width: 200px;
+  border-right: 1px solid black;
+  position: relative; 
+  height: 1500px; 
+  background-color: white;
+}
+
+ .time-header, .tech-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 50px; 
+  line-height: 50px;
+  box-sizing: border-box;
   background-color: lightblue;
   text-align: center;
-  padding: 10px;
   font-weight: bold;
   border-bottom: 2px solid black;
+  margin: 0;
+  padding: 0;
+}
+
+ .time-label {
+  height: 60px;
+  box-sizing: border-box; 
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;  
+}
+
+ .time-column {
+  position: sticky;
+  left: 0;
+  z-index: 110;
+  width: 80px;
+  background-color: #eeeeee; 
+  border-right: 1px solid black;
+  flex-shrink: 0;
+  height: 1500px; 
 }
 
 .grid-content {
   position: relative;
-  height: (24 * 60)px;
+  background-color: white;
+  height: 1500px; 
+  background-image: linear-gradient(#dddddd 1px, transparent 1px);
+  background-size: 100% 60px;
+  background-repeat: repeat-y; 
+  margin: 0;
+  padding: 0;
 }
 
-/* Work Order Blocks */
 .work-order-block {
-  position: absolute; /*TODO CRUCIAL*/
-  background-color: blue;
+  position: absolute;
+  box-sizing: border-box;
+  background-color: rgba(3, 155, 229, 0.9);
   color: white;
-  width: 90%;
-  margin-left: 5%;
-  padding: 5px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 13x;
   border: 1px solid white;
-  font-size: 12px;
+  z-index: 5;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.15);
+  
+  /* Scrolling if box too small for text */
+  overflow-y: auto;
+  overflow-x: hidden; 
+  word-wrap: break-word;
+}
+
+/* Extra scrolling details */
+.work-order-block::-webkit-scrollbar {
+  width: 4px;
+}
+.work-order-block::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
 }

@@ -1,40 +1,83 @@
-<%# app/views/scheduler/index.html.erb %>
-
-<div style="background-color: #333; color: white; padding: 15px;">
+<div style="background-color: #333; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
   <h1 style="margin: 0;">Terrier Rails Technician Schedule</h1>
+  <h2 style="margin: 0; font-weight: 400;"><%= @schedule_date %></h2>
 </div>
 
 <div class="calendar-container">
-  
   <div class="time-column">
-    <div style="height: 40px; border-bottom: 2px solid black;">Time</div> 
-    <% @hours.each do |hour| %>
+    <div class="time-header">Time</div>
+    <% (0..23).each do |h| %>
       <div class="time-label">
-        <%= hour %>:00
+        <%= Time.parse("#{h}:00").strftime("%l:%M %p") %>
       </div>
     <% end %>
   </div>
 
   <% @techs.each do |tech| %>
     <div class="tech-column">
-      <div class="tech-header">
-        <%= tech.name %>
-      </div>
+      <div class="tech-header"><%= tech.name %></div>
       
-      <div class="grid-content">
-        <% @wos.select { |wo| wo.technician_id == tech.id }.each do |wo| %>
-          <%# Basic math: minutes from midnight %>
-          <% top_pos = (wo.time.hour * 60) + wo.time.min %> 
+      <div class="grid-content" onclick="calculateGap(this, event, '<%= tech.name %>')">
+        <% current_wos = @wos_by_tech[tech.id] || [] %>
+        
+        <% current_wos.each_with_index do |wo, index| %> 
+            <% start_m = (wo.time.hour * 60) + wo.time.min
+            
+            others = current_wos.select { |o| (wo.time < o.time + o.duration.minutes) && (wo.time + wo.duration.minutes > o.time) }
+            width = 90 / others.count
+            left = (others.index(wo) * width) + 2 %>
+
+          <div class="work-order-block" 
+               data-start="<%= start_m %>" 
+               data-end="<%= start_m + wo.duration %>"
+               data-num="<%= index + 1 %>"
+               style="top: <%= start_m %>px; height: <%= wo.duration %>px; width: <%= width %>%; left: <%= left %>%;">
+            
+            <strong> <%= wo.location.name %>, <%= wo.location.city %> </strong><br>
+            <%= wo.time.strftime("%l:%M %p") %> - <%= (wo.time + wo.duration.minutes).strftime("%l:%M %p") %> | $<%= wo.price %>
           
-          <div class="work-order-block" style="top: <%= top_pos %>px; height: <%= wo.duration %>px;">
-            <b><%= wo.location.name %></b><br>
-            <%= wo.location.city %><br>
-            $<%= wo.price %>
-          </div>
+            </div>
         <% end %>
       </div>
-    
     </div>
-  <% end %>
-
+  <% end %> 
 </div>
+
+<script>
+function calculateGap(grid, event, techName) {
+  if (event.target.closest('.work-order-block')) return;
+
+  const rect = grid.getBoundingClientRect();
+  const clickedAt = Math.floor(event.clientY - rect.top);
+
+  const items = Array.from(grid.querySelectorAll('.work-order-block')).map(el => ({
+    start: parseInt(el.dataset.start),
+    end: parseInt(el.dataset.end),
+    num: el.dataset.num
+  })).sort((a, b) => a.start - b.start);
+
+  let prevWo = null;
+  let nextWo = null;
+  
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].end <= clickedAt) {
+      prevWo = items[i];
+    } else if (items[i].start >= clickedAt) {
+      nextWo = items[i];
+      break; 
+    }
+  }
+
+  const startLimit = prevWo ? prevWo.end : 0;
+  const endLimit = nextWo ? nextWo.start : 1440;
+  const diff = endLimit - startLimit;
+  
+  const h = Math.floor(diff / 60);
+  const m = diff % 60;
+
+  const label1 = prevWo ? "Work Order " + prevWo.num : "Start of Day";
+  const label2 = nextWo ? "Work Order " + nextWo.num : "End of Day";
+
+  alert(`${h}h ${m}m (${diff} total min) between ${label1} and ${label2} for ${techName}`);
+}
+</script>

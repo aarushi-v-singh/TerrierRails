@@ -1,26 +1,16 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a schedule viewer for work orders for different technicians within a certain day. It contains a grid similar to google calendar with additional information seen within the work order boxes.
 
-Things you may want to cover:
+### DEPENDENCIES and PREREQS
 
-* Ruby version: 3.4.9
+### SETUP
+1. Clone the repo to your local directory using git clone <LINK REPO>
+2. Enter the directory using cd TerrierRails
+3. Install all dependencies listed in Gemfile using bundle install
+4. Set up SQLite DB with model tables using rails db:prepare
+5. Populate DB using rails db:importCSVs
+6. Start running the server and view the website using rails server
 
-* Rails version: 8.1.2
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+### APPROACH
+The requirements specified 
