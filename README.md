@@ -14,7 +14,7 @@ This is a schedule viewer for work orders assigned to different technicians with
 ### APPROACH
 Ruby on Rails follows an MVC pattern, so I approached the project by building out each component step by step. I relied mostly on the official Rails guides and GeeksforGeeks to get comfortable with setup, structure, and common patterns.
 
-For the model layer, I created a CSV directory inside the db folder to store the provided CSV data. Then I defined models corresponding to each CSV entity and wrote a rake task to load the data into a SQLite database (one I'm most familiar with). This task uses find_or_create_by, which keeps the process idempotent by avoiding duplicate entries if the data is already present.
+For the model layer, I created a CSV directory inside the db folder to store the provided CSV data. Then I defined models corresponding to each CSV entity and wrote a rake task to load the data into a SQLite database (one I'm most familiar with). This task uses find_or_create_by, which keeps the task idempotent by avoiding duplicate entries if the data is already present.
 
 The controller took some trial and error but was overall pretty basic. GeeksforGeeks recommended a retrieval method that would return more entries at once and sort the data entries as needed. I did run into 1 issue: intially, I created the controller and viewer basic files under thier respective directories, but a key component of the MVC pattern is the router that actually routes the commands to the right places. I also added a hash map with technician IDs as keys and their work orders as values, which made it easier to handle the user click behavior outlined in requirement 4.
 
